@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Packet Delivery Time Estimator</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-light text-dark" id="main-body">
+    <div class="container mt-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>📡 Packet Delivery Time Estimator</h2>
+            <button class="btn btn-secondary" onclick="toggleDarkMode()">🌓 Toggle Dark Mode</button>
+        </div>
+
+        <form method="POST" class="card p-4 shadow-sm">
+            <div class="mb-3">
+                <label>Distance (km)</label>
+                <input type="number" name="distance" class="form-control" required step="any">
+            </div>
+            <div class="mb-3">
+                <label>Packet Size (bytes)</label>
+                <input type="number" name="packet" class="form-control" required step="any">
+            </div>
+            <div class="mb-3">
+                <label>Bandwidth (Mbps)</label>
+                <input type="number" name="bandwidth" class="form-control" required step="any">
+            </div>
+            <div class="mb-3">
+                <label>Delay (ms)</label>
+                <input type="number" name="delay" class="form-control" required step="any">
+            </div>
+            <button type="submit" class="btn btn-primary">Estimate</button>
+        </form>
+
+        {% if result is not none %}
+        <div class="alert alert-success mt-4">
+            <h4>Estimated Delivery Time: <strong>{{ result }} ms</strong></h4>
+        </div>
+
+        <form action="/download" method="post">
+            <input type="hidden" name="distance" value="{{ inputs.distance }}">
+            <input type="hidden" name="packet" value="{{ inputs.packet }}">
+            <input type="hidden" name="bandwidth" value="{{ inputs.bandwidth }}">
+            <input type="hidden" name="delay" value="{{ inputs.delay }}">
+            <input type="hidden" name="result" value="{{ inputs.result }}">
+            <button class="btn btn-success">Download CSV</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
